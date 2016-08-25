@@ -1,8 +1,8 @@
 <resources>
 <string name="app_name">Rolling dice</string>
-<string name="player1_taxt">Player1 Score:</string>
+<string name="player1_taxt">Player1</string>
 <string name="score1">0</string>
-<string name="player2">Player 2 Score:</string>
+<string name="player2">Player2</string>
 <string name="score2">0</string>
 <string name="tx_player">Player\'s Turn:</string>
 <string name="turn">1</string>
@@ -10,4 +10,5 @@
 <string name="tvHold">HOLD</string>
 <string name="tvRoll">ROLL</string>
 <string name="turn_text">Turn Score:</string>
+    <string name="score_text">\ score:\ </string>
 </resources>

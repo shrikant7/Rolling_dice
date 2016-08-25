@@ -25,9 +25,11 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/score1"
         android:id="@+id/score1"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/player1"
-        android:layout_toEndOf="@+id/player1" />
+
+        android:layout_toLeftOf="@+id/turn_score"
+        android:layout_alignTop="@+id/textView"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,9 +37,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/player2"
         android:id="@+id/player2"
-        android:layout_alignTop="@+id/score2"
-        android:layout_toLeftOf="@+id/score2"
-        android:layout_toStartOf="@+id/score2" />
+        android:layout_alignTop="@+id/textView4"
+        android:layout_toLeftOf="@+id/textView4"
+        android:layout_toStartOf="@+id/textView4" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -126,6 +128,26 @@
             android:id="@+id/reset_button"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/score_text"
+        android:id="@+id/textView"
+        android:layout_alignTop="@+id/player1"
+        android:layout_toRightOf="@+id/player1"
+        android:layout_toEndOf="@+id/player1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/score_text"
+        android:id="@+id/textView4"
+        android:layout_alignTop="@+id/score2"
+        android:layout_toLeftOf="@+id/score2"
+        android:layout_toStartOf="@+id/score2" />
 
 
 </RelativeLayout>
