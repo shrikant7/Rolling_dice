@@ -1,9 +1,14 @@
 package com.example.eklavya.rollingdice;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,6 +19,8 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer = null;
+    private String mPlayer1Name,mPlayer2Name;
+    private TextView player1,player2;
     int fs1=0,fs2=0,ts=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +32,18 @@ public class MainActivity extends AppCompatActivity {
         final TextView playerTurn = (TextView) findViewById(R.id.turn);
         final TextView turnScore = (TextView) findViewById(R.id.turn_score);
         final ImageView dice = (ImageView) findViewById(R.id.dice);
-        final TextView player1 = (TextView) findViewById(R.id.player1);
-        final TextView player2 = (TextView) findViewById(R.id.player2);
+        player1 = (TextView) findViewById(R.id.player1);
+        player2 = (TextView) findViewById(R.id.player2);
 
         Button roll = (Button) findViewById(R.id.roll_button);
         Button hold = (Button) findViewById(R.id.hold_button);
         Button reset = (Button) findViewById(R.id.reset_button);
         mediaPlayer = MediaPlayer.create(this,R.raw.cheering);
         final Random randomGenerator = new Random();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mPlayer1Name=prefs.getString(this.getString(R.string.preference_player1_key),this.getString(R.string.player1_text));
+        mPlayer2Name=prefs.getString(this.getString(R.string.preference_player2_key),this.getString(R.string.player2));
 
         roll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +97,42 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this,prefs.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String player1_name=prefs.getString(this.getString(R.string.preference_player1_key),this.getString(R.string.player1_text));
+        String player2_name=prefs.getString(this.getString(R.string.preference_player2_key),this.getString(R.string.player2));
+        if(player1_name!=mPlayer1Name)
+        {
+            mPlayer1Name=player1_name;
+            player1.setText(mPlayer1Name);
+        }
+        if(player2_name!=mPlayer2Name)
+        {
+            mPlayer2Name=player2_name;
+            player2.setText(mPlayer2Name);
+        }
+    }
     private void updateToReset(TextView score1, TextView score2, TextView turnScore, TextView playerTurn, ImageView dice) {
         ts=0;
         fs1=0;

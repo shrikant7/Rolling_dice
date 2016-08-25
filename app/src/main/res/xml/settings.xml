@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <EditTextPreference
+            android:title="@string/player1_text"
+            android:summary="@string/player1_text"
+            android:key="@string/preference_player1_key"
+            android:defaultValue="@string/player1_text"
+            android:inputType="text"
+            android:singleLine="true"
+            android:maxLength="8"
+        />
+        <EditTextPreference
+            android:title="@string/player2"
+            android:summary="@string/player2"
+            android:key="@string/preference_player2_key"
+            android:defaultValue="@string/player2"
+            android:inputType="text"
+            android:singleLine="true"
+            android:maxLength="8"
+        />
+</PreferenceScreen>
