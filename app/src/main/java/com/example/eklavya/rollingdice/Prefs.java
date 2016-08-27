@@ -14,18 +14,16 @@ import android.view.LayoutInflater;
 /**
  * Created by eklavya on 26/8/16.
  */
-public class prefs extends Activity {
+public class Prefs extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Display the fragment as the main content.
-
-
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
-
-
 
     }
     public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
@@ -35,9 +33,32 @@ public class prefs extends Activity {
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.settings);
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.preference_player1_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.preference_player2_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.preference_bot)));
+            Preference player1 = findPreference(getString(R.string.preference_player1_key));
+            final Preference player2 = findPreference(getString(R.string.preference_player2_key));
+
+            CheckBoxPreference bot = (CheckBoxPreference) findPreference(getString(R.string.preference_bot));
+            bot.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    Boolean bool = (Boolean) o;
+                    if(bool) {
+                        player2.getEditor().putString(getString(R.string.preference_player2_key), "BOT").apply();
+                        player2.setSummary("BOT");
+                        player2.setEnabled(false);
+                    }
+                    else
+                    {
+                        player2.getEditor().putString(getString(R.string.preference_player2_key), "Player2").apply();
+                        player2.setSummary("Player2");
+                        player2.setEnabled(true);
+                    }
+                    return true;
+                }
+            });
+
+            //update summary according to its value.
+            bindPreferenceSummaryToValue(player1);
+            bindPreferenceSummaryToValue(player2);
         }
 
         private void bindPreferenceSummaryToValue(Preference preference) {
@@ -52,20 +73,13 @@ public class prefs extends Activity {
         }
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            if(preference instanceof CheckBoxPreference)
-            {
-                Log.d("prefs",newValue.toString());
-            }
-            else
-            {
                 String stringValue = newValue.toString();
                 if(!stringValue.equals(""))
                 {
                     preference.setSummary(stringValue);
                     return true;
                 }
-            }
-                return  false;
+           return false;
         }
     }
 }

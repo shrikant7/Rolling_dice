@@ -21,27 +21,34 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer = null;
     private String mPlayer1Name,mPlayer2Name;
-    private TextView player1,player2;
+    private  Button roll,hold,reset;
+    private TextView player1,player2,score1,score2,turnScore,playerTurn;
+    private ImageView dice;
     int fs1=0,fs2=0,ts=0;
+    Boolean BOT;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final TextView score1 = (TextView) findViewById(R.id.score1);
-        final TextView score2 = (TextView) findViewById(R.id.score2);
-        final TextView turnScore = (TextView) findViewById(R.id.turn_score);
-        final ImageView dice = (ImageView) findViewById(R.id.dice);
-        final TextView playerTurn = (TextView) findViewById(R.id.player_turn);
+        //check initialy for bot enable or not.
+        BOT = isBot();
+        score1 = (TextView) findViewById(R.id.score1);
+        score2 = (TextView) findViewById(R.id.score2);
+        turnScore = (TextView) findViewById(R.id.turn_score);
+        dice = (ImageView) findViewById(R.id.dice);
+        playerTurn = (TextView) findViewById(R.id.player_turn);
         player1 = (TextView) findViewById(R.id.player1);
         player2 = (TextView) findViewById(R.id.player2);
 
-        Button roll = (Button) findViewById(R.id.roll_button);
-        Button hold = (Button) findViewById(R.id.hold_button);
-        Button reset = (Button) findViewById(R.id.reset_button);
+        roll = (Button) findViewById(R.id.roll_button);
+        hold = (Button) findViewById(R.id.hold_button);
+        reset = (Button) findViewById(R.id.reset_button);
         mediaPlayer = MediaPlayer.create(this,R.raw.cheering);
         final Random randomGenerator = new Random();
 
+        //get initial names from sharedPreferences and update ui.
         mPlayer1Name = getSharedPlayer(this.getString(R.string.preference_player1_key),this.getString(R.string.player1_text));
         mPlayer2Name= getSharedPlayer(this.getString(R.string.preference_player2_key),this.getString(R.string.player2_text));
         playerTurn.setText(mPlayer1Name);
@@ -49,14 +56,22 @@ public class MainActivity extends AppCompatActivity {
         roll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateImage(randomGenerator, dice,playerTurn);
+                int diceNumber = updateImage(randomGenerator, dice,playerTurn);
                 turnScore.setText(ts+"");
+                if(diceNumber==1)
+                {
+                    changePlayer(playerTurn);
+                    //if diceNumber is 1 and bot is enabled then go for bot's chance.
+                    if(BOT)
+                        computerTurn(randomGenerator);
+                }
             }
         });
         hold.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dice.setImageResource(R.drawable.dice1);
+
                 if(playerTurn.getText().equals(mPlayer1Name))
                 {
                     fs1+=ts;
@@ -70,24 +85,13 @@ public class MainActivity extends AppCompatActivity {
                 changePlayer(playerTurn);
                 ts=0;
                 turnScore.setText(ts+"");
+                isAnyWin();
 
-                if(fs1>=50)
+                //if second player is BOT then bot's turn.
+                if(BOT && playerTurn.getText().equals(mPlayer2Name))
                 {
-                    mediaPlayer.start();
-                    Toast toast=Toast.makeText(MainActivity.this,player1.getText()+" wins!!!\nscore:"+fs1, Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER,0,0);
-                    toast.show();
-                    updateToReset(score1, score2, turnScore, playerTurn, dice);
+                    computerTurn(randomGenerator);
                 }
-                if(fs2>=50)
-                {
-                    mediaPlayer.start();
-                    Toast toast=Toast.makeText(MainActivity.this,player2.getText()+" wins!!!\nscore:"+fs2, Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER,0,0);
-                    toast.show();
-                    updateToReset(score1, score2, turnScore, playerTurn, dice);
-                }
-
             }
         });
         reset.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +103,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //check if any of player gets total above 100.
+    private void isAnyWin() {
+        if(fs1>=100)
+        {
+            mediaPlayer.start();
+            Toast toast=Toast.makeText(MainActivity.this,player1.getText()+" wins!!!\nscore:"+fs1, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+            updateToReset(score1, score2, turnScore, playerTurn, dice);
+        }
+        if(fs2>=100)
+        {
+            mediaPlayer.start();
+            Toast toast=Toast.makeText(MainActivity.this,player2.getText()+" wins!!!\nscore:"+fs2, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+            updateToReset(score1, score2, turnScore, playerTurn, dice);
+        }
+    }
+
+    //check is bot enable or not.
+    private boolean isBot() {
+        return PreferenceManager.getDefaultSharedPreferences(this).getBoolean(this.getString(R.string.preference_bot),false);
+    }
+
+    //get sharedPlayer names.
     @NonNull
     private String  getSharedPlayer(String key,String defaultName) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -116,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this,prefs.class));
+            startActivity(new Intent(this,Prefs.class));
             return true;
         }
         if(id==R.id.action_about)
@@ -145,6 +175,10 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         String player1_name = getSharedPlayer(this.getString(R.string.preference_player1_key),this.getString(R.string.player1_text));
         String player2_name= getSharedPlayer(this.getString(R.string.preference_player2_key),this.getString(R.string.player2_text));
+        if(!BOT.equals(isBot()))
+        {
+            BOT=!BOT;
+        }
         if(player1_name!=null && !player1_name.equals(mPlayer1Name))
         {
             mPlayer1Name=player1_name;
@@ -156,17 +190,20 @@ public class MainActivity extends AppCompatActivity {
         player1.setText(mPlayer1Name);
         player2.setText(mPlayer2Name);
     }
+
+    //updates all ui to Zero.
     private void updateToReset(TextView score1, TextView score2, TextView turnScore, TextView playerTurn, ImageView dice) {
         ts=0;
         fs1=0;
         fs2=0;
-        score1.setText(0+"");
-        score2.setText(0+"");
-        turnScore.setText(0+"");
+        score1.setText(String.valueOf(0));
+        score2.setText(String.valueOf(0));
+        turnScore.setText(String .valueOf(0));
         playerTurn.setText(mPlayer1Name);
         dice.setImageResource(R.drawable.dice1);
     }
 
+    //change player turn on ui.
     private void changePlayer(TextView playerTurn) {
         if(playerTurn.getText().equals(mPlayer1Name))
             playerTurn.setText(mPlayer2Name);
@@ -174,13 +211,13 @@ public class MainActivity extends AppCompatActivity {
             playerTurn.setText(mPlayer1Name);
     }
 
-    private void updateImage(Random randomGenerator, ImageView dice,TextView playerTurn) {
+    //method for gettiing random number and updating dice image.
+    private int updateImage(Random randomGenerator, ImageView dice,TextView playerTurn) {
         int diceNumber = randomGenerator.nextInt(6)+1;
         switch (diceNumber)
         {
             case 1: dice.setImageResource(R.drawable.dice1);
                 ts=0;
-                changePlayer(playerTurn);
                 break;
             case 2: dice.setImageResource(R.drawable.dice2);
                 ts+=diceNumber;
@@ -198,5 +235,30 @@ public class MainActivity extends AppCompatActivity {
                 ts+=diceNumber;
                 break;
         }
+        return diceNumber;
+    }
+
+    //play for computer.
+    private void computerTurn(Random rand) {
+        //diable buttons in computer's turn.
+        roll.setEnabled(false);
+        hold.setEnabled(false);
+
+        int diceNumber;
+        while(ts<15)
+        {
+            diceNumber=updateImage(rand, dice,playerTurn);
+            turnScore.setText(String .valueOf(ts));
+            if(diceNumber==1)
+                break;
+        }
+        fs2+=ts;ts=0;
+        score2.setText(String .valueOf(fs2));
+        isAnyWin();
+
+        //again enable buttons to player 1;
+        roll.setEnabled(true);
+        hold.setEnabled(true);
+        changePlayer(playerTurn);
     }
 }

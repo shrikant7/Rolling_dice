@@ -15,15 +15,15 @@
     <string name="preference_player2_key">player2_name</string>
     <string name="preference_player1_key">player1_name</string>
     <string name="preference_bot">computer</string>
-    <string name="pref_computer_summary">Player1 be the Bot</string>
+    <string name="pref_computer_summary">Player2 be the Bot</string>
     <string name="play_bot_text">Play with Computer</string>
     <string name="about_title">About</string>
-    <string name="about_text">Scarne’s Dice is a turn-based dice game where players score points by rolling a die and then:
-        if they roll a 1, score no points and lose their turn
-        if they roll a 2 to 6:
-            add the rolled value to their points
-            choose to either reroll or keep their score and end their turn
-
-        The winner is the first player that reaches (or exceeds) 100 points.
+    <string name="about_text">Scarne’s Dice is a turn-based dice game where players score points by rolling a die and then:\n
+        1)if they roll a 1, score no points and lose their turn\n
+        2)if they roll a 2 to 6:\n\t
+            i)add the rolled value to their points\n\t
+            ii)choose to either reroll or keep their score and end their turn\n
+        **The winner is the first player that reaches (or exceeds) 100 points.
     </string>
+    <string name="about_lable">About game</string>
 </resources>

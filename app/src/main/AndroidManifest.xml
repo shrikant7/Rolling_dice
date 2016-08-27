@@ -16,10 +16,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".prefs"
+            android:name=".Prefs"
             android:label="@string/action_settings"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-        <activity android:name=".About"></activity>
+        <activity android:name=".About"
+            android:label="@string/about_lable"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
     </application>
 
 </manifest>
