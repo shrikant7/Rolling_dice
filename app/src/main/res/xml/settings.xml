@@ -10,12 +10,18 @@
             android:maxLength="8"
         />
         <EditTextPreference
-            android:title="@string/player2"
-            android:summary="@string/player2"
+            android:title="@string/player2_text"
+            android:summary="@string/player2_text"
             android:key="@string/preference_player2_key"
-            android:defaultValue="@string/player2"
+            android:defaultValue="@string/player2_text"
             android:inputType="text"
             android:singleLine="true"
             android:maxLength="8"
         />
+        <CheckBoxPreference
+            android:title="@string/play_bot_text"
+            android:summary="@string/pref_computer_summary"
+            android:defaultValue="false"
+            android:key="@string/preference_bot"
+            />
 </PreferenceScreen>

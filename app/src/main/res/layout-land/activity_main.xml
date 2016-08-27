@@ -10,7 +10,6 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:weightSum="12"
-        android:background="@color/background"
         tools:context="com.example.eklavya.rollingdice.MainActivity">
 
         <LinearLayout
@@ -23,7 +22,8 @@
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="start">
+                android:gravity="start"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -51,8 +51,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="end"
-                >
+                android:gravity="end">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -79,11 +78,18 @@
 
         </LinearLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_weight="8">
+
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:gravity="center_horizontal">
 
             <TextView
@@ -103,36 +109,36 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/dice"
-            android:src="@drawable/dice1"
-            android:layout_weight="4"
-            android:layout_gravity="center_horizontal" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dice"
+                android:src="@drawable/dice1"
+            android:layout_weight="1"/>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
             android:gravity="center_horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/turn_text"
-                android:id="@+id/textView3" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/turn_text"
+                    android:id="@+id/textView3" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="0"
-                android:id="@+id/turn_score" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="0"
+                    android:id="@+id/turn_score" />
+            </LinearLayout>
+    </LinearLayout>
 
-        <LinearLayout
+    <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

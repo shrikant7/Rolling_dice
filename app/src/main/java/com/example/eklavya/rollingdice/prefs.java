@@ -2,11 +2,13 @@ package com.example.eklavya.rollingdice;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 /**
@@ -35,6 +37,7 @@ public class prefs extends Activity {
             addPreferencesFromResource(R.xml.settings);
             bindPreferenceSummaryToValue(findPreference(getString(R.string.preference_player1_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.preference_player2_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.preference_bot)));
         }
 
         private void bindPreferenceSummaryToValue(Preference preference) {
@@ -45,15 +48,22 @@ public class prefs extends Activity {
             onPreferenceChange(preference,
                     PreferenceManager
                             .getDefaultSharedPreferences(preference.getContext())
-                            .getString(preference.getKey(), "Player#"));
+                            .getString(preference.getKey(), ""));
         }
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            String stringValue = newValue.toString();
-            if(!stringValue.equals(""))
+            if(preference instanceof CheckBoxPreference)
             {
-                preference.setSummary(stringValue);
-                return true;
+                Log.d("prefs",newValue.toString());
+            }
+            else
+            {
+                String stringValue = newValue.toString();
+                if(!stringValue.equals(""))
+                {
+                    preference.setSummary(stringValue);
+                    return true;
+                }
             }
                 return  false;
         }
